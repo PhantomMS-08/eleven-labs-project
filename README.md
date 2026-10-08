@@ -77,5 +77,8 @@ eleven labs project/
 
 ## 🔑 ElevenLabs API Integration
 
-- **Configured Key**: The ElevenLabs API key provided is pre-configured and active in `server.py` and `app.js`.
-- **Custom Key Management**: Click the **API ACTIVE** button in the top right of the website to update, inspect, or test with any other API key directly from the UI.
+- **Environment Configuration**: Copy `.env.example` to `.env` and add your ElevenLabs API key:
+  ```env
+  ELEVENLABS_API_KEY=your_elevenlabs_api_key_here
+  ```
+- **Custom Key Management via UI**: Click the **API KEY** button in the top right of the website to update or test with any other API key directly from the UI.

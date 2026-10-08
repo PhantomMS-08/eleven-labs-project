@@ -1,0 +1,584 @@
+u
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Naruto Shippuden Voice Jutsu | Text-to-Speech in Hindi & English</title>
+  <meta name="description"
+    content="Convert text to speech in the authentic anime voices of Madara, Sasuke, Naruto, Tobi, and Kakashi in Hindi and English. Powered by ElevenLabs AI.">
+  <meta name="theme-color" content="#ff5500">
+
+  <!-- Google Fonts: Cinzel Decorative, Shojumaru, Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Outfit:wght@300;400;500;600;700;800&family=Shojumaru&family=Rozha+One&family=Yuji+Boku&display=swap"
+    rel="stylesheet">
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="theme-madara" data-character="madara">
+  <!-- Dynamic Chakra Aura Background Canvas -->
+  <canvas id="chakraCanvas"></canvas>
+  <div class="vignette-overlay"></div>
+  <div class="scanlines"></div>
+
+  <div class="app-wrapper">
+    <!-- Header / Shinobi Scroll Banner -->
+    <header class="shinobi-header">
+      <div class="header-left">
+        <div class="sharingan-icon-wrap" id="mainSharingan" title="Uchiha Sharingan Jutsu">
+          <svg class="sharingan-svg" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="46" fill="#c00" stroke="#111" stroke-width="6" />
+            <circle cx="50" cy="50" r="28" fill="none" stroke="#222" stroke-width="2.5" stroke-dasharray="3,2" />
+            <circle cx="50" cy="50" r="10" fill="#111" />
+            <!-- 3 Tomoe -->
+            <g class="tomoe-group">
+              <g transform="translate(50, 50)">
+                <path class="tomoe tomoe-1"
+                  d="M 0 -28 C 7 -28 11 -20 7 -15 C 3 -10 -4 -10 -4 -16 C -4 -23 0 -28 0 -28 Z" fill="#111" />
+                <circle cx="2" cy="-21" r="5" fill="#111" />
+              </g>
+              <g transform="translate(50, 50) rotate(120)">
+                <path class="tomoe tomoe-2"
+                  d="M 0 -28 C 7 -28 11 -20 7 -15 C 3 -10 -4 -10 -4 -16 C -4 -23 0 -28 0 -28 Z" fill="#111" />
+                <circle cx="2" cy="-21" r="5" fill="#111" />
+              </g>
+              <g transform="translate(50, 50) rotate(240)">
+                <path class="tomoe tomoe-3"
+                  d="M 0 -28 C 7 -28 11 -20 7 -15 C 3 -10 -4 -10 -4 -16 C -4 -23 0 -28 0 -28 Z" fill="#111" />
+                <circle cx="2" cy="-21" r="5" fill="#111" />
+              </g>
+            </g>
+          </svg>
+        </div>
+        <div class="header-titles">
+          <div class="japanese-title">忍術音声スタジオ ・ NARUTO SHIPPUDEN</div>
+          <h1 class="main-title">SHINOBI <span>VOICE JUTSU</span></h1>
+          <p class="sub-title">AI Text-to-Speech in Hindi & English • Five Legendary Ninja Voices</p>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- SFX Toggle -->
+        <button id="sfxToggleBtn" class="ninja-btn-icon" title="Toggle Ninja Sound FX">
+          <i class="fa-solid fa-volume-high"></i>
+          <span>SFX ON</span>
+        </button>
+
+        <!-- Voice Lab / Custom Voices Modal trigger -->
+        <button id="voiceLabBtn" class="ninja-btn-outline" title="Custom Anime Cloned Voices">
+          <i class="fa-solid fa-flask-vial"></i>
+          <span>VOICE LAB</span>
+        </button>
+
+        <!-- API Key Status / Modal trigger -->
+        <button id="keyConfigBtn" class="ninja-btn-outline" title="ElevenLabs Configuration">
+          <i class="fa-solid fa-key"></i>
+          <span>API ACTIVE</span>
+          <span class="pulse-dot"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Language Selector Bar -->
+    <section class="language-bar-section">
+      <div class="language-pill-container">
+        <span class="lang-label"><i class="fa-solid fa-scroll"></i> SELECT JUTSU LANGUAGE:</span>
+        <button class="lang-btn active" data-lang="en" id="langBtnEn">
+          <span class="flag-icon">🇬🇧</span> English Voice
+        </button>
+        <button class="lang-btn" data-lang="hi" id="langBtnHi">
+          <span class="flag-icon">🇮🇳</span> Hindi Voice (हिंदी आवाज़)
+        </button>
+      </div>
+
+      <div class="ninja-village-badge" id="currentAuraBadge">
+        <span class="chakra-flame"></span>
+        <span class="badge-text" id="activeCharacterAuraText">MADARA UCHIHA • SUSANOO CHAKRA</span>
+      </div>
+    </section>
+
+    <!-- Character Cards Grid -->
+    <section class="characters-section">
+      <div class="section-heading">
+        <span class="kanji-watermark">忍五人</span>
+        <h2>CHOOSE YOUR <span>SHINOBI</span></h2>
+        <p>Select any of the five legendary characters to summon their voice</p>
+      </div>
+
+      <div class="characters-grid" id="charactersGrid">
+        <!-- 1. MADARA UCHIHA -->
+        <article class="character-card active" data-char="madara" id="card-madara">
+          <div class="card-glow"></div>
+          <div class="card-image-wrap">
+            <img src="assets/images/madara.jpg" alt="Madara Uchiha Anime Portrait" loading="eager" class="char-img">
+            <div class="char-overlay"></div>
+            <div class="clan-crest uchiha-crest" title="Uchiha Clan"></div>
+            <div class="chakra-type-tag crimson">SUSANOO</div>
+          </div>
+          <div class="card-info">
+            <div class="kanji-name">宇智波斑</div>
+            <h3 class="char-name">Madara Uchiha</h3>
+            <p class="char-title">Legendary Ghost of the Uchiha</p>
+            <div class="char-voice-meta">
+              <span class="voice-tone"><i class="fa-solid fa-microphone-lines"></i> Dominant • Commanding</span>
+            </div>
+            <div class="char-quick-quote" title="Click to use quote">
+              <i class="fa-solid fa-quote-left"></i> "Wake up to reality..."
+            </div>
+          </div>
+          <div class="active-ninja-indicator">
+            <i class="fa-solid fa-fire-flame-curved"></i> SELECTED
+          </div>
+        </article>
+
+        <!-- 2. SASUKE UCHIHA -->
+        <article class="character-card" data-char="sasuke" id="card-sasuke">
+          <div class="card-glow"></div>
+          <div class="card-image-wrap">
+            <img src="assets/images/sasuke.jpg" alt="Sasuke Uchiha Anime Portrait" loading="eager" class="char-img">
+            <div class="char-overlay"></div>
+            <div class="clan-crest uchiha-crest" title="Uchiha Clan"></div>
+            <div class="chakra-type-tag lightning">CHIDORI</div>
+          </div>
+          <div class="card-info">
+            <div class="kanji-name">宇智波佐助</div>
+            <h3 class="char-name">Sasuke Uchiha</h3>
+            <p class="char-title">Shadow Hokage & Avenger</p>
+            <div class="char-voice-meta">
+              <span class="voice-tone"><i class="fa-solid fa-microphone-lines"></i> Sharp • Cold • Resolute</span>
+            </div>
+            <div class="char-quick-quote" title="Click to use quote">
+              <i class="fa-solid fa-quote-left"></i> "I have closed my eyes..."
+            </div>
+          </div>
+          <div class="active-ninja-indicator">
+            <i class="fa-solid fa-bolt-lightning"></i> SELECTED
+          </div>
+        </article>
+
+        <!-- 3. NARUTO UZUMAKI -->
+        <article class="character-card" data-char="naruto" id="card-naruto">
+          <div class="card-glow"></div>
+          <div class="card-image-wrap">
+            <img src="assets/images/naruto.jpg" alt="Naruto Uzumaki Anime Portrait" loading="eager" class="char-img">
+            <div class="char-overlay"></div>
+            <div class="clan-crest uzumaki-crest" title="Uzumaki Clan"></div>
+            <div class="chakra-type-tag kurama">NINE-TAILS</div>
+          </div>
+          <div class="card-info">
+            <div class="kanji-name">うずまきナルト</div>
+            <h3 class="char-name">Naruto Uzumaki</h3>
+            <p class="char-title">Hero of Konoha & Seventh Hokage</p>
+            <div class="char-voice-meta">
+              <span class="voice-tone"><i class="fa-solid fa-microphone-lines"></i> Spirited • Fierce • Raspy</span>
+            </div>
+            <div class="char-quick-quote" title="Click to use quote">
+              <i class="fa-solid fa-quote-left"></i> "That's my ninja way! Dattebayo!"
+            </div>
+          </div>
+          <div class="active-ninja-indicator">
+            <i class="fa-solid fa-sun"></i> SELECTED
+          </div>
+        </article>
+
+        <!-- 4. TOBI / OBITO -->
+        <article class="character-card" data-char="tobi" id="card-tobi">
+          <div class="card-glow"></div>
+          <div class="card-image-wrap">
+            <img src="assets/images/tobi.jpg" alt="Tobi / Obito Uchiha Anime Portrait" loading="eager" class="char-img">
+            <div class="char-overlay"></div>
+            <div class="clan-crest akatsuki-cloud" title="Akatsuki"></div>
+            <div class="chakra-type-tag kamui">KAMUI VOID</div>
+          </div>
+          <div class="card-info">
+            <div class="kanji-name">トビ / オビト</div>
+            <h3 class="char-name">Tobi / Obito</h3>
+            <p class="char-title">The Masked Man of Akatsuki</p>
+            <div class="char-voice-meta">
+              <span class="voice-tone"><i class="fa-solid fa-microphone-lines"></i> Trickster / Menacing Obito</span>
+            </div>
+            <div class="char-quick-quote" title="Click to use quote">
+              <i class="fa-solid fa-quote-left"></i> "Tobi is a good boy! Senpai!"
+            </div>
+          </div>
+          <div class="active-ninja-indicator">
+            <i class="fa-solid fa-mask"></i> SELECTED
+          </div>
+        </article>
+
+        <!-- 5. KAKASHI HATAKE -->
+        <article class="character-card" data-char="kakashi" id="card-kakashi">
+          <div class="card-glow"></div>
+          <div class="card-image-wrap">
+            <img src="assets/images/kakashi.jpg" alt="Kakashi Hatake Anime Portrait" loading="eager" class="char-img">
+            <div class="char-overlay"></div>
+            <div class="clan-crest hatake-crest" title="Konoha Anbu"></div>
+            <div class="chakra-type-tag raikiri">RAIKIRI</div>
+          </div>
+          <div class="card-info">
+            <div class="kanji-name">はたけカカシ</div>
+            <h3 class="char-name">Kakashi Hatake</h3>
+            <p class="char-title">The Copy Ninja of the Sharingan</p>
+            <div class="char-voice-meta">
+              <span class="voice-tone"><i class="fa-solid fa-microphone-lines"></i> Calm • Composed • Smooth</span>
+            </div>
+            <div class="char-quick-quote" title="Click to use quote">
+              <i class="fa-solid fa-quote-left"></i> "Those who abandon comrades..."
+            </div>
+          </div>
+          <div class="active-ninja-indicator">
+            <i class="fa-solid fa-eye"></i> SELECTED
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Main Jutsu Casting Console -->
+    <main class="console-section">
+      <div class="console-card">
+        <!-- Top Scroll Header -->
+        <div class="scroll-header">
+          <div class="scroll-roller-left"></div>
+          <div class="scroll-title-bar">
+            <div class="active-char-banner" id="activeCharBanner">
+              <img id="activeCharThumb" src="assets/images/madara.jpg" alt="Selected Character Thumbnail"
+                class="banner-thumb">
+              <div>
+                <h4 id="activeCharHeaderName">Madara Uchiha (宇智波斑)</h4>
+                <span id="activeCharVoiceStyle">Dominant Male Voice • Multilingual v2</span>
+              </div>
+            </div>
+
+            <!-- Dialogue Presets Dropdown / Quick Buttons -->
+            <div class="preset-quotes-container">
+              <span class="preset-label"><i class="fa-solid fa-wand-magic-sparkles"></i> Famous Anime Quotes:</span>
+              <div class="preset-chips" id="presetChipsContainer">
+                <!-- Dynamically populated based on active character & language -->
+              </div>
+            </div>
+          </div>
+          <div class="scroll-roller-right"></div>
+        </div>
+
+        <!-- Text Input Scroll Area -->
+        <div class="scroll-body">
+          <div class="input-header-row">
+            <label for="textInput" class="input-label">
+              <i class="fa-solid fa-feather-pointed"></i> ENTER TEXT FOR SPEECH SYNTHESIS (वाणी लिपि):
+            </label>
+            <div class="text-meta-tags">
+              <span class="char-counter" id="charCounter">0 / 2500 characters</span>
+              <button class="clear-btn" id="clearTextBtn" title="Clear input text"><i class="fa-solid fa-eraser"></i>
+                Clear</button>
+            </div>
+          </div>
+
+          <div class="textarea-container">
+            <textarea id="textInput" rows="4"
+              placeholder="Wake up to reality! Nothing ever goes as planned in this accursed world. In this world, wherever there is light, there are always shadows to be found."
+              spellcheck="false"></textarea>
+
+            <div class="textarea-corner-seal top-left"></div>
+            <div class="textarea-corner-seal top-right"></div>
+            <div class="textarea-corner-seal bottom-left"></div>
+            <div class="textarea-corner-seal bottom-right"></div>
+          </div>
+
+          <!-- Ninja Jutsu Parameters Panel -->
+          <div class="chakra-controls-panel">
+            <div class="control-group">
+              <div class="control-label-row">
+                <span><i class="fa-solid fa-sliders"></i> Chakra Stability (स्थिरता):</span>
+                <span class="control-val" id="stabilityVal">50%</span>
+              </div>
+              <input type="range" id="stabilitySlider" min="0" max="100" value="50" class="ninja-slider">
+              <span class="control-hint">Higher = More consistent tone • Lower = Dramatic emotional anime
+                inflection</span>
+            </div>
+
+            <div class="control-group">
+              <div class="control-label-row">
+                <span><i class="fa-solid fa-bullseye"></i> Voice Resonance (समानता):</span>
+                <span class="control-val" id="similarityVal">75%</span>
+              </div>
+              <input type="range" id="similaritySlider" min="0" max="100" value="75" class="ninja-slider">
+              <span class="control-hint">Clarity and acoustic punch of the character's voice</span>
+            </div>
+
+            <div class="control-group">
+              <div class="control-label-row">
+                <span><i class="fa-solid fa-gauge-high"></i> Shinobi Pace (गति):</span>
+                <span class="control-val" id="speedVal">1.0x</span>
+              </div>
+              <input type="range" id="speedSlider" min="70" max="130" value="100" class="ninja-slider">
+              <span class="control-hint">Adjust playback cadence (0.7x Slow dramatic to 1.3x Rapid ninja)</span>
+            </div>
+
+            <div class="control-group persona-toggle-group" id="tobiPersonaContainer" style="display: none;">
+              <div class="control-label-row">
+                <span><i class="fa-solid fa-masks-theater"></i> Tobi Dual Persona:</span>
+              </div>
+              <div class="persona-switch">
+                <button class="persona-btn active" data-persona="tobi" id="personaTobi">Playful Tobi</button>
+                <button class="persona-btn" data-persona="obito" id="personaObito">Masked Obito</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Anime Voice Morphing DSP Bar -->
+          <div class="anime-dsp-panel">
+            <div class="dsp-header-row">
+              <div class="dsp-title-wrap">
+                <i class="fa-solid fa-wand-magic-sparkles dsp-icon"></i>
+                <div>
+                  <span class="dsp-title">ANIME CHARACTER ACOUSTIC DSP MORPHING</span>
+                  <p class="dsp-subtitle">Applies real-time pitch shifting, sub-bass resonance, throat rasp, and mask
+                    acoustic shaping to match the anime</p>
+                </div>
+              </div>
+              <label class="ninja-switch-wrap" title="Toggle Character Acoustic Filters">
+                <input type="checkbox" id="animeDspToggle" checked>
+                <span class="ninja-switch-slider"></span>
+                <span class="switch-label" id="dspSwitchLabel">DSP ON</span>
+              </label>
+            </div>
+            <div class="dsp-status-badge" id="dspStatusBadge">
+              <i class="fa-solid fa-wave-square"></i> Active Filter: <strong id="currentDspFilterName">Madara Susanoo
+                Bass & Cavernous Reverb (-14% Pitch, +12dB Sub-Bass)</strong>
+            </div>
+          </div>
+
+          <!-- Action Cast Button & Status -->
+          <div class="cast-action-row">
+            <button id="castJutsuBtn" class="cast-jutsu-button">
+              <div class="btn-chakra-glow"></div>
+              <div class="btn-content">
+                <span class="hand-sign-icon"><i class="fa-solid fa-hand-fist"></i></span>
+                <span class="btn-text">CAST VOICE JUTSU</span>
+                <span class="kanji-btn">術 発動</span>
+              </div>
+            </button>
+
+            <!-- Secondary Preview sample button -->
+            <button id="randomQuoteBtn" class="ninja-btn-secondary" title="Load random iconic anime dialogue">
+              <i class="fa-solid fa-dice"></i> Random Dialogue
+            </button>
+          </div>
+
+          <!-- Casting Jutsu Hand Signs Animation Overlay -->
+          <div class="casting-animation-overlay" id="castingOverlay">
+            <div class="hand-signs-display">
+              <div class="seal-icon" id="seal1">寅 <span class="seal-name">Tiger</span></div>
+              <div class="seal-arrow">➔</div>
+              <div class="seal-icon" id="seal2">辰 <span class="seal-name">Dragon</span></div>
+              <div class="seal-arrow">➔</div>
+              <div class="seal-icon" id="seal3">巳 <span class="seal-name">Snake</span></div>
+              <div class="seal-arrow">➔</div>
+              <div class="seal-icon active" id="seal4">未 <span class="seal-name">Ram</span></div>
+            </div>
+            <div class="casting-status-text" id="castingStatusText">
+              Channeling Chakra into ElevenLabs Multilingual Neural Network...
+            </div>
+            <div class="rasengan-spinner">
+              <div class="spin-core"></div>
+              <div class="spin-ring ring-1"></div>
+              <div class="spin-ring ring-2"></div>
+              <div class="spin-ring ring-3"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Audio Player & Chakra Visualizer Section -->
+        <div class="scroll-footer-player" id="playerContainer">
+          <div class="player-top-row">
+            <div class="now-speaking-info">
+              <div class="sound-wave-icon" id="soundWaveIcon">
+                <span></span><span></span><span></span><span></span><span></span>
+              </div>
+              <div class="speaker-details">
+                <span class="tag-label">VOICE JUTSU ACTIVE:</span>
+                <h5 id="nowPlayingTitle">Madara Uchiha — "Wake up to reality..."</h5>
+              </div>
+            </div>
+
+            <div class="player-actions">
+              <button id="downloadAudioBtn" class="download-btn" title="Download Audio (MP3)">
+                <i class="fa-solid fa-cloud-arrow-down"></i> Download MP3
+              </button>
+            </div>
+          </div>
+
+          <!-- Real-Time Chakra Waveform Canvas -->
+          <div class="visualizer-wrapper">
+            <canvas id="audioVisualizerCanvas" height="85"></canvas>
+            <div class="visualizer-hud">
+              <span class="hud-left"><i class="fa-solid fa-wave-square"></i> CHAKRA FREQUENCY SPECTRUM</span>
+              <span class="hud-right" id="playbackTimeDisplay">00:00 / 00:00</span>
+            </div>
+          </div>
+
+          <!-- Custom Audio Controller -->
+          <div class="custom-audio-bar">
+            <button id="playPauseBtn" class="play-pause-btn" title="Play / Pause">
+              <i class="fa-solid fa-play"></i>
+            </button>
+            <button id="restartBtn" class="step-btn" title="Restart Audio">
+              <i class="fa-solid fa-rotate-left"></i>
+            </button>
+
+            <div class="progress-bar-container" id="progressBarContainer">
+              <div class="progress-track" id="progressTrack">
+                <div class="progress-fill" id="progressFill"></div>
+                <div class="progress-handle" id="progressHandle"></div>
+              </div>
+            </div>
+
+            <div class="volume-control-wrap">
+              <i class="fa-solid fa-volume-high volume-icon" id="volumeIcon"></i>
+              <input type="range" id="volumeSlider" min="0" max="100" value="100" class="volume-slider">
+            </div>
+          </div>
+
+          <!-- Hidden native audio element -->
+          <audio id="mainAudioElement" preload="auto"></audio>
+        </div>
+      </div>
+    </main>
+
+    <!-- Scroll History: Recent Jutsu Speeches -->
+    <section class="history-section" id="historySection">
+      <div class="history-header">
+        <h3><i class="fa-solid fa-scroll"></i> RECENT JUTSU SPEECHES</h3>
+        <button id="clearHistoryBtn" class="clear-history-btn"><i class="fa-solid fa-trash-can"></i> Clear
+          History</button>
+      </div>
+      <div class="history-list" id="historyList">
+        <div class="empty-history" id="emptyHistoryMsg">
+          No jutsu synthesized yet. Select a shinobi, enter dialogue, and cast your voice jutsu!
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="shinobi-footer">
+      <div class="footer-symbols">
+        <span class="leaf-symbol" title="Konohagakure">🍃</span>
+        <span class="uchiha-symbol" title="Uchiha Clan">🔥</span>
+        <span class="cloud-symbol" title="Akatsuki">☁️</span>
+      </div>
+      <p>NARUTO SHIPPUDEN VOICE JUTSU STUDIO • POWERED BY ELEVENLABS MULTILINGUAL v2</p>
+      <p class="copyright-disclaimer">Fan-made anime tribute project. Naruto Shippuden characters & universe are
+        property of Masashi Kishimoto / Shueisha, TV Tokyo, and Studio Pierrot.</p>
+    </footer>
+  </div>
+
+  <!-- API Key Modal Dialog -->
+  <div class="ninja-modal" id="apiKeyModal">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4><i class="fa-solid fa-key"></i> ELEVENLABS API KEY CONFIGURATION</h4>
+        <button class="modal-close-btn" id="closeModalBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>The provided ElevenLabs API key is configured and active for high-fidelity anime text-to-speech in both Hindi
+          and English.</p>
+        <div class="key-field-wrap">
+          <label for="apiKeyInput">API Key:</label>
+          <div class="input-with-eye">
+            <input type="password" id="apiKeyInput" value="sk_6ded40bdbb83d804dcfeee9835241ad77dc0fae8cab5be49">
+            <button type="button" id="toggleKeyVisibility" class="eye-btn"><i class="fa-solid fa-eye"></i></button>
+          </div>
+        </div>
+        <div class="modal-info-box">
+          <p><i class="fa-solid fa-circle-check"></i> <strong>Model:</strong> <code>eleven_multilingual_v2</code>
+            (supports authentic English & Hindi pronunciation).</p>
+          <p><i class="fa-solid fa-server"></i> <strong>Proxy Server:</strong> Standard Python backend proxy enabled to
+            prevent CORS limitations.</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="ninja-btn-outline" id="resetDefaultKeyBtn">Reset Default</button>
+        <button class="ninja-btn-primary" id="saveKeyBtn">Save & Apply</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shinobi Voice Lab Modal (Custom Cloned Voice IDs & Cloning Guide) -->
+  <div class="ninja-modal" id="voiceLabModal">
+    <div class="modal-backdrop" id="voiceLabModalBackdrop"></div>
+    <div class="modal-content large-modal">
+      <div class="modal-header">
+        <h4><i class="fa-solid fa-flask-vial"></i> SHINOBI VOICE LAB • CUSTOM CLONED VOICES</h4>
+        <button class="modal-close-btn" id="closeVoiceLabModalBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="lab-guide-card">
+          <h5><i class="fa-solid fa-circle-info"></i> How to Get 100% Original Anime Voices</h5>
+          <p>ElevenLabs default stock voices (Adam, Roger, Liam, etc.) are standard English voice actors. To get the
+            <strong>exact voice actor</strong> from Naruto (Neil Kaplan / Naoya Uchida for Madara, Yuri Lowenthal for
+            Sasuke, etc.):
+          </p>
+          <ol class="lab-steps">
+            <li>Log in to <a href="https://elevenlabs.io/app/voice-lab" target="_blank"
+                rel="noopener">elevenlabs.io/app/voice-lab</a>.</li>
+            <li>Click <strong>"Add Generative or Cloned Voice"</strong> ➔ <strong>"Instant Voice Cloning"</strong>.</li>
+            <li>Upload a 1-minute clean audio clip of the character speaking from the anime.</li>
+            <li>Copy the generated <strong>Voice ID</strong> and paste it into the character inputs below!</li>
+          </ol>
+        </div>
+
+        <h5 class="voice-ids-title"><i class="fa-solid fa-sliders"></i> Character Voice IDs (Custom or Stock):</h5>
+        <div class="voice-id-grid">
+          <!-- Madara -->
+          <div class="voice-id-row">
+            <span class="char-tag-pill madara-tag">Madara Uchiha</span>
+            <input type="text" id="voiceIdMadara" class="voice-id-input"
+              placeholder="Voice ID (e.g. pNInz6obpgDQGcFmaJgB)">
+          </div>
+          <!-- Sasuke -->
+          <div class="voice-id-row">
+            <span class="char-tag-pill sasuke-tag">Sasuke Uchiha</span>
+            <input type="text" id="voiceIdSasuke" class="voice-id-input"
+              placeholder="Voice ID (e.g. CwhRBWXzGAHq8TQ4Fs17)">
+          </div>
+          <!-- Naruto -->
+          <div class="voice-id-row">
+            <span class="char-tag-pill naruto-tag">Naruto Uzumaki</span>
+            <input type="text" id="voiceIdNaruto" class="voice-id-input"
+              placeholder="Voice ID (e.g. TX3LPaxmHKxFdv7VOQHJ)">
+          </div>
+          <!-- Tobi -->
+          <div class="voice-id-row">
+            <span class="char-tag-pill tobi-tag">Tobi / Obito</span>
+            <input type="text" id="voiceIdTobi" class="voice-id-input"
+              placeholder="Voice ID (e.g. N2lVS1w4EtoT3dr4eOWO)">
+          </div>
+          <!-- Kakashi -->
+          <div class="voice-id-row">
+            <span class="char-tag-pill kakashi-tag">Kakashi Hatake</span>
+            <input type="text" id="voiceIdKakashi" class="voice-id-input"
+              placeholder="Voice ID (e.g. kSIyQ8cADEzDIL2F7AbG)">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="ninja-btn-outline" id="resetVoiceIdsBtn">Reset to Defaults</button>
+        <button class="ninja-btn-primary" id="saveVoiceIdsBtn">Save Custom Voice IDs</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio element for UI sound effects -->
+  <script src="app.js"></script>
+</body>
+
+</html>
